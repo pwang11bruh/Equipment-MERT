@@ -12,7 +12,7 @@
 | --- | --- |
 | `anon` | **None.** All table, sequence and function privileges are revoked. |
 | `authenticated` | RLS policies all require `is_admin()`. Inventory tables are **select-only**. Writes go through `SECURITY DEFINER` `admin_*` RPCs that call `_assert_admin()`. For `alerts`, only the `status`, `acknowledged_at` and `resolved_at` columns are updatable. |
-| `service_role` | Used only by server code (`src/lib/supabase/service.ts`). Executes `verify_member_pin`, `process_submission` and `refresh_alerts`. |
+| `service_role` | Used only by server code (`src/lib/supabase/service.ts`). It executes `verify_member_pin`, `process_submission` and `refresh_alerts`. It also reads `items(id, name, unit, description)` for the member form (`src/lib/catalog.ts`). |
 
 Tables with RLS enabled and **no policies**, which means no API access at all: `app_secrets` (holds the PIN hash) and `pin_attempts`.
 

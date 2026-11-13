@@ -1,7 +1,7 @@
 # Project Status
 
 **Last updated:** 2026-11-13
-**Current phase:** Phase 1 (foundation) is ✅ complete, and the hosted Supabase project is live with the schema. Admin bootstrap is pending; Phase 2 (member submission portal) is next.
+**Current phase:** Phase 2 (member submission portal) is ✅ built and waiting on owner testing. Phase 3 (admin portal) is next.
 
 ## Current state
 
@@ -45,28 +45,30 @@
 - **Admin account bootstrapped:** auth user `mertadmin@mert.local` (confirmed) is registered in `admin_users`. Admins log in with the username **`mertadmin`** (ADR-009).
 - Public sign-ups are **disabled** on the hosted project (verified via the Management API: `disable_signup = true`).
 
+- **Phase 2 is built:** `/submit` (PIN gate, A–Z list with search, restock/replacement, steppers, success screen, lock); `/admin/login` (username `mertadmin`); the protected admin layout; a placeholder dashboard; and Settings → member PIN.
+  - Smoke-tested against the live project: routes and redirects work, the catalog renders (115 items A–Z) only behind a valid PIN cookie, no stock fields reach members, and a tampered cookie is rejected.
+  - Not yet tested: an end-to-end real submission (it would write to the live DB) and real phones.
+
 ### Pending
 - The member PIN is not set yet. Until it is, `verify_member_pin` always fails. The owner will set it from the admin Settings page (Phase 3), or we add a minimal settings page earlier.
 - **Catalog:** migration 0400 is **pushed to the hosted project** and verified: 115 items in 10 categories. All par and minimum thresholds are 0 (alerts off) until the owner sets them in the admin UI. No stock (lots) has been entered yet.
 
 ### Not done yet
-- None of the UI routes exist yet except the placeholder landing page: no `/submit`, no `/admin/*`.
 - Notification dispatch (Resend/Twilio) and `/api/cron/daily` are not built.
 - There is no git remote (GitHub) yet; Vercel deployment will need one.
 
-## Next up (Phase 2: member submission portal)
-1. `/submit` page: PIN gate (server action → `verify_member_pin` → `startMemberSession`).
-2. Mobile form with these fields:
-   - name
-   - reason (restock / replacement)
-   - context (call / bag check / other)
-   - optional call #
-   - an item picker: **one flat A–Z list of every active item, with a search box** (instant, case-insensitive substring match) and quantity steppers on the selected items (ADR-010)
-   - a cause per line when the reason is replacement
-3. A server action that validates the input with zod, checks `hasMemberSession()`, and calls `process_submission` via the service client.
-4. A success screen. Members never see stock counts. If the result is `flagged` (a discrepancy), say thanks and that the Equipment Officer has been notified.
-
-See [ROADMAP.md](ROADMAP.md) for the later phases.
+## Next up
+1. **Owner:** sign in at `/admin/login` as `mertadmin` and set the member PIN under Settings.
+2. **Owner:** try `/submit` on a phone. Until stock is entered, every submission is flagged with a "recount" alert, because the Equipment Room is empty in the records.
+3. **Phase 3 (admin portal):**
+   - inventory table
+   - receive stock, with expiry or a "no expiry" checkbox
+   - the "Move next batch to Equipment Room" action
+   - par and minimum editing per item
+   - alerts inbox (acknowledge / resolve)
+   - submissions log
+   Initial stock counts can then be entered.
+4. Deploy to Vercel (needs a GitHub repo) so phones can reach it outside `localhost`.
 
 ## Known issues / caveats
 - **Shared admin account:** the audit trail cannot distinguish which admin acted; the ledger `actor` is always `'admin'`. This is accepted per the owner's decision (ADR-002).

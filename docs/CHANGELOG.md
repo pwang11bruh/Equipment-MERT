@@ -3,6 +3,7 @@
 Newest first. Format: `YYYY-MM-DD: summary (area)`.
 
 ## 2026-11-13
+- Phase 2: the `/submit` member flow (PIN gate, A–Z search picker with synonyms, steppers, replacement causes, success and discrepancy messaging, lock); admin username login; protected admin layout; placeholder dashboard; Settings → member PIN (app).
 - Migration 0400 pushed to the hosted project; the catalog is live (ops).
 - Decision: the member form shows one A–Z list of all items with a search box, without category grouping (ADR-010) (product).
 - Categories and items are displayed alphabetically (owner request). The migration 0400 category `sort_order` was reassigned A–Z, and the convention is documented in OVERVIEW (app/docs).
