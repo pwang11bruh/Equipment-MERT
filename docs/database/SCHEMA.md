@@ -8,6 +8,7 @@ Source of truth: `supabase/migrations/*.sql`. This file explains it. Update it w
 | `20261113000100_core_schema.sql` | Extensions, enums, tables, indexes, `set_updated_at` trigger |
 | `20261113000200_inventory_logic.sql` | Views, lot primitives, `process_submission`, admin RPCs, alerts engine, PIN functions |
 | `20261113000300_security.sql` | Grants, RLS enablement, policies |
+| `20261113000400_catalog_and_optional_expiry.sql` | Real catalog (115 items, 10 categories). `admin_receive_stock` no longer requires an expiry date. |
 
 ## Entity overview
 ```
@@ -101,7 +102,7 @@ One row per email or SMS attempt. Columns: `channel`, `destination`, `subject`, 
 | `process_submission(name, reason, context, lines jsonb, call_ref?, notes?)` → `{submission_id, status, lines[]}` | service_role | Issues items from the equipment room (FEFO) |
 | `refresh_alerts()` → open count | admin, service_role | Recompute alerts |
 | `admin_set_member_pin(pin)` | admin | Rotate the member PIN |
-| `admin_receive_stock(item, qty, location='backstock', exp?, lot#?, cost?, received_on?, notes?)` → lot id | admin | New stock (FEFO-checked if received into the room) |
+| `admin_receive_stock(item, qty, location='backstock', exp?, lot#?, cost?, received_on?, notes?)` → lot id | admin | New stock (FEFO-checked if received into the room). The expiry date is optional, because some brands don't expire; already-expired stock is rejected. |
 | `admin_transfer_lot(lot, qty, to_location, reason?)` | admin | Move between the room and backstock. Moving into the room is FEFO-enforced. |
 | `admin_set_lot_status(lot, qty, status, reason?)` | admin | Mark functional or out of service |
 | `admin_dispose_lot(lot, qty, reason)` | admin | Throw away |

@@ -23,6 +23,7 @@ before changing anything, and must update the docs as part of the same change.
 | [operations/ENVIRONMENT.md](operations/ENVIRONMENT.md) | Every env var: what it is and where to get it |
 | [operations/DEPLOYMENT.md](operations/DEPLOYMENT.md) | Supabase and Vercel production setup, plus admin bootstrap |
 | [product/REQUIREMENTS.md](product/REQUIREMENTS.md) | Original requirements and the clarified answers from the owner |
+| [product/CATALOG.md](product/CATALOG.md) | The imported item catalog (115 items) |
 
 ---
 

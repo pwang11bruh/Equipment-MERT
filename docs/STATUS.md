@@ -47,7 +47,7 @@
 
 ### Pending
 - The member PIN is not set yet. Until it is, `verify_member_pin` always fails. The owner will set it from the admin Settings page (Phase 3), or we add a minimal settings page earlier.
-- The catalog is empty: no seed has run in production.
+- **Catalog:** migration 0400 holds the real catalog (115 items; see product/CATALOG.md). ⚠️ It is committed and tested locally but **not yet pushed** to the hosted project; it is waiting on the owner's OK. All par and minimum thresholds are 0 (alerts off) until the owner sets them.
 
 ### Not done yet
 - None of the UI routes exist yet except the placeholder landing page: no `/submit`, no `/admin/*`.

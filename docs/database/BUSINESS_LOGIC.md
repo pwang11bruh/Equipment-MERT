@@ -10,6 +10,12 @@ All inventory rules live in Postgres (`20261113000200_inventory_logic.sql`). Typ
 
 Bags are **not tracked**. When a member takes an item for a bag, it leaves inventory (movement `issue`).
 
+## 0.5 Items that expire only for some brands
+`tracks_expiration = true` means the item **may** carry an expiry date. Examples: SuperSani wipes expire and SaniZide don't; Hudson RCI NRB masks and O2 tubing expire and McKesson don't.
+- `admin_receive_stock` accepts a null date for these, meaning "this unit has no expiry".
+- The admin UI must ask for the date and offer an explicit **"No expiration date on this unit"** checkbox.
+- Lots without a date sort **last** in FEFO.
+
 ## 1. Usable stock
 A unit is **usable** when its lot is `functional` **and** not expired (`expiration_date is null or >= today`).
 Par checks, FEFO ranking and issuing only consider usable units. Expired units still count in `expired_qty` and raise `expired` alerts until someone disposes of them.
