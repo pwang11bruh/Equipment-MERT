@@ -1,15 +1,24 @@
 # Deployment
 
 Target: **Supabase Cloud** (database and auth) plus **Vercel** (Next.js and cron).
-Status as of 2026-11-13: **not deployed**. Update this file as each step is done.
+Status as of 2026-11-13:
+- **Supabase project:** `MERT Equipment`, ref `szaapavpgjrtatfmpuug`, region us-east-1, URL `https://szaapavpgjrtatfmpuug.supabase.co`.
+  - ✅ Linked and migrations 0100–0300 pushed.
+  - ✅ API keys are in `.env.local`.
+  - ✅ Live RLS check passed: anon is denied on tables, views and RPCs.
+  - ⏳ Admin bootstrap, PIN and catalog are still to do.
+- **Vercel:** not deployed. There is no GitHub remote yet.
+
+Update this file as each step is done.
 
 ## 1. Supabase project
 1. Create a project at supabase.com. Pick the region closest to your users and save the DB password in a password manager.
-2. Link and push the migrations:
+2. Link and push the migrations. Set `SUPABASE_ACCESS_TOKEN` and `SUPABASE_DB_PASSWORD` in `.env.local` first.
    ```sh
-   npx supabase login
+   set -a; source .env.local; set +a
    npx supabase link --project-ref <ref>
-   npx supabase db push
+   npx supabase db push --remote      # --remote is required: without it the CLI targets the local stack
+   npm run db:types
    ```
 3. Under **Authentication → Sign In / Providers**, turn off "Allow new users to sign up". Keep the Email provider enabled.
 4. **Bootstrap the shared admin account:**

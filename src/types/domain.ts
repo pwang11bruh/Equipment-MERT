@@ -1,9 +1,8 @@
 /**
  * Hand-written domain types mirroring the database (supabase/migrations).
- *
- * Once the project is linked to a Supabase instance, also generate the full
- * typed client schema with `npm run db:types` (writes src/types/database.ts)
- * and pass `Database` as the generic to the Supabase clients.
+ * The Supabase clients are typed by the GENERATED src/types/database.ts
+ * (`npm run db:types` after every migration push). This file holds friendlier
+ * names, enum value lists for UI, and RPC JSON shapes the generator can't see.
  * If you change an enum or view in SQL, update this file in the same change.
  */
 

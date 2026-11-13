@@ -23,9 +23,9 @@ npm run dev               # http://localhost:3000
 
 ## Option B: use a hosted Supabase dev project (no Docker)
 ```sh
-npx supabase login
+set -a; source .env.local; set +a   # SUPABASE_ACCESS_TOKEN + SUPABASE_DB_PASSWORD
 npx supabase link --project-ref <ref>
-npx supabase db push        # apply migrations
+npx supabase db push --remote       # apply migrations
 # seed.sql is NOT applied by db push; for sample data run it in the SQL editor
 ```
 Then fill `.env.local` with that project's URL and keys.
@@ -40,5 +40,6 @@ See database/BUSINESS_LOGIC.md §7. This uses Homebrew `postgresql@17` with a st
 | `npm run typecheck` / `npm run lint` / `npm run build` | Quality gates; all three must pass before you finish a task |
 | `npm run db:new <name>` | Create a new timestamped migration |
 | `npm run db:reset` | Rebuild the local DB from migrations and seed |
-| `npm run db:types` | Regenerate `src/types/database.ts` |
+| `npm run db:push` | Push new migrations to the linked hosted project (needs `.env.local` sourced) |
+| `npm run db:types` | Regenerate `src/types/database.ts` from the linked project (`db:types:local` for Docker) |
 | `npx shadcn@latest add <component>` | Add a shadcn/ui component |

@@ -1,7 +1,7 @@
 # Project Status
 
 **Last updated:** 2026-11-13
-**Current phase:** Phase 1 (foundation) is ✅ complete. The hosted Supabase project is being set up. Phase 2 (member submission portal) is next.
+**Current phase:** Phase 1 (foundation) is ✅ complete, and the hosted Supabase project is live with the schema. Admin bootstrap is pending; Phase 2 (member submission portal) is next.
 
 ## Current state
 
@@ -36,11 +36,19 @@
 - A git repository is initialised and the foundation is committed on `main`.
 - `npm run typecheck`, `npm run lint` and `npm run build` all pass.
 
-### In progress
-- **Hosted Supabase project.** The owner chose a hosted project over local Docker. Steps are in operations/DEPLOYMENT.md §1: log in to the CLI, create the project, link, `db push`, bootstrap the admin, set the PIN, and fill `.env.local`.
+- **Hosted Supabase:** project `MERT Equipment`, ref `szaapavpgjrtatfmpuug`, us-east-1.
+  - It is linked, and migrations 0100–0300 are pushed.
+  - `.env.local` has the URL and keys, plus the CLI token and DB password, all gitignored.
+  - The live check passed: anon is denied on tables, views and RPCs; the service role works.
+- `src/types/database.ts` is generated from the live project, and all Supabase clients are typed with `Database`.
+
+### In progress (owner actions in the Supabase dashboard)
+- Create the shared admin user, then insert its id into `admin_users` (DEPLOYMENT.md §1.4).
+- Turn off "Allow new users to sign up". `config.toml` only covers local.
+- The member PIN is not set yet. Until it is, `verify_member_pin` always fails.
+- The catalog is empty: no seed has run in production.
 
 ### Not done yet
-- `src/types/database.ts` (generated types) does not exist yet. Once linked, run `npx supabase gen types typescript --linked > src/types/database.ts`.
 - None of the UI routes exist yet except the placeholder landing page: no `/submit`, no `/admin/*`.
 - Notification dispatch (Resend/Twilio) and `/api/cron/daily` are not built.
 - There is no git remote (GitHub) yet; Vercel deployment will need one.

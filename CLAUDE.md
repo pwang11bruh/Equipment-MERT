@@ -13,6 +13,7 @@ Stack: Next.js 15 (App Router) + shadcn/ui + Tailwind v4 + Supabase.
 - **Members never see stock.** Anything reachable without the admin login must not expose quantities.
 - **The service-role client** (`src/lib/supabase/service.ts`) is only for the uses listed in that file and in `docs/architecture/SECURITY.md`.
 - **Quality gates:** `npm run typecheck && npm run lint && npm run build` must pass before you finish.
+- **Supabase CLI:** the project is linked (ref `szaapavpgjrtatfmpuug`). Run `set -a; source .env.local; set +a` before CLI commands. After any new migration: `npm run db:push`, then `npm run db:types`. **Never print `.env.local` values.**
 - **Node** is Homebrew keg-only: `export PATH="/opt/homebrew/opt/node@22/bin:$PATH"`.
 
 ## Keep the docs alive (mandatory)
