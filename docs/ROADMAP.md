@@ -15,23 +15,26 @@ Tick each box when it is done, in the same change as the code, and keep [STATUS.
 - [x] Documentation system (`docs/`, `CLAUDE.md`)
 
 ## Phase 2: Member submission portal (mobile)
-- [ ] `/submit` PIN gate page and server action
-- [ ] Submission form (React Hook Form + zod): a **single A–Z list of all items with a search box** (no category grouping; ADR-010) and quantity steppers
-- [ ] Server action that calls `process_submission`
-- [ ] Confirmation screen with shortfall messaging
-- [ ] "Lock" button / session expiry handling
+- [x] `/submit` PIN gate page and server action
+- [x] Submission form (zod; plain React state, not React Hook Form): a **single A–Z list of all items with a search box** (ADR-010) and quantity steppers
+- [x] Server action that calls `process_submission`
+- [x] Confirmation screen with discrepancy messaging
+- [x] "Lock" button and session expiry handling
+- [ ] Real-device test on iOS Safari and Android Chrome
 - [ ] PWA manifest and icons ("Add to Home Screen")
 
 ## Phase 3: Admin portal
-- [ ] `/admin/login` (username + password; username → `<name>@mert.local`, ADR-009)
-- [ ] Admin layout with nav, guarded by `isAdminRequest()`
+- [x] `/admin/login` (username + password; username → `<name>@mert.local`, ADR-009)
+- [x] Admin layout with nav, guarded by `isAdminRequest()`
+- [x] Placeholder dashboard (open alerts + recent submissions)
 - [ ] Dashboard: KPIs, open alerts, FEFO swap list
 - [ ] Inventory: per-item stock table with filters; lot drill-down showing FEFO rank and expiry badges
 - [ ] Lot actions: receive, "Move next batch to Equipment Room" (one tap from the alert), transfer, mark out-of-service or functional, dispose, adjust count, "Mark swapped" (FEFO rebalance)
 - [ ] Item catalog CRUD (thresholds, unit cost, archive)
 - [ ] Submissions log with flagged filter
 - [ ] Alerts page: acknowledge and resolve
-- [ ] Settings: member PIN, expiration warning days, SMS threshold, alert recipients CRUD
+- [x] Settings: member PIN
+- [ ] Settings: expiration warning days, SMS threshold, alert recipients CRUD
 
 ## Phase 4: Notifications
 - [ ] `src/lib/notifications/{email,sms,dispatch}.ts` (Resend, Twilio)
