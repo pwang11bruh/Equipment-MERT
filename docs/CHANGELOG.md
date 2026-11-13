@@ -3,6 +3,7 @@
 Newest first. Format: `YYYY-MM-DD: summary (area)`.
 
 ## 2026-11-13
+- Categories and items are displayed alphabetically (owner request). The migration 0400 category `sort_order` was reassigned A–Z, and the convention is documented in OVERVIEW (app/docs).
 - Migration 0400 adds the real catalog from the owner's bag-check form: 115 items in 10 type-based categories, with no thresholds yet. The expiry date on receive is now optional, for items that expire only for some brands. The seed now uses real item names (db).
 - Shared admin `mertadmin@mert.local` registered in `admin_users`; public sign-ups confirmed disabled; ADR-009 username login (ops).
 - Hosted Supabase project `szaapavpgjrtatfmpuug` linked and migrations pushed. Generated `src/types/database.ts`; Supabase clients are now typed (ops/app).

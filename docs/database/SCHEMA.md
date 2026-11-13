@@ -42,7 +42,7 @@ admin_users ─ auth.users      app_settings (singleton)      app_secrets (singl
 Columns: `name` (unique, case-insensitive), `category_id`, `description`, `unit` (each/pair/kit…), `tracks_expiration`, `is_equipment` (can be marked out of service instead of disposed), `room_par_qty` (equipment room par; alert below it), `min_backstock_qty` (reorder below it; 0 disables either alert), `unit_cost` (default cost), `vendor`, `vendor_sku`, `is_archived` (hidden from the member form and from alerts).
 
 ### `item_categories`
-`name` (unique) and `sort_order`; used to group the member form.
+`name` (unique) and `sort_order`; used to group the member form. Display order is **alphabetical by name**: `sort_order` mirrors A–Z for the initial import, but the UI sorts by name.
 
 ### `inventory_lots`: on-hand stock
 One row per (item, location, status, expiration_date, lot_number, unit_cost). Other columns: `quantity ≥ 0`, `received_on`, `notes`.

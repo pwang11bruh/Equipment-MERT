@@ -67,19 +67,21 @@ end;
 $$;
 
 -- ---------------------------------------------------------------------------
--- Categories (grouping for the member form; by item type, not bag compartment)
+-- Categories (grouping for the member form; by item type, not bag compartment).
+-- Display order is ALPHABETICAL (owner request): sort_order follows A–Z, and
+-- items are always listed A–Z by name within a category.
 -- ---------------------------------------------------------------------------
 insert into public.item_categories (name, sort_order) values
-  ('Airway & Breathing',            10),
-  ('Bleeding & Trauma',             20),
-  ('Wound Care',                    30),
-  ('Splinting & Immobilization',    40),
-  ('Medications',                   50),
-  ('Diagnostics & Monitoring',      60),
-  ('AED',                           70),
-  ('PPE & Infection Control',       80),
-  ('General Supplies',              90),
-  ('Forms & References',           100)
+  ('AED',                             10),
+  ('Airway & Breathing',              20),
+  ('Bleeding & Trauma',               30),
+  ('Diagnostics & Monitoring',        40),
+  ('Forms & References',              50),
+  ('General Supplies',                60),
+  ('Medications',                     70),
+  ('PPE & Infection Control',         80),
+  ('Splinting & Immobilization',      90),
+  ('Wound Care',                      100)
 on conflict (name) do nothing;
 
 -- ---------------------------------------------------------------------------
