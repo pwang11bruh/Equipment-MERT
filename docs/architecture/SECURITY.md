@@ -5,7 +5,8 @@
 | --- | --- | --- |
 | **Member** | Shared numeric PIN (4–12 digits). On success the server sets a signed, httpOnly cookie, `mert_member`, valid for `MEMBER_SESSION_HOURS` (default 12). | Submit the restock/replacement form. They see item names only and **never stock levels**. |
 | **Admin** | One shared Supabase Auth user (email + password) registered in `public.admin_users`. | Everything: read all data, inventory RPCs, catalog, settings and alerts. |
-| **Cron** | `Authorization: Bearer $CRON_SECRET` header on `/api/cron/*`. | Refresh alerts and send notifications (service role). |
+| **Cron** | `Authorization: Bearer $CRON_SECRET` header on `/api/cron/*`. Returns 401 otherwise, including when `CRON_SECRET` is unset. | Refresh alerts and send notifications (service role). |
+| **CSV export** | `/api/export/*` checks `isAdminRequest()` and then queries as the admin (RLS). | Download inventory, usage and movements. |
 
 ## Postgres roles
 | Role | Access |

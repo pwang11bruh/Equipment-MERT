@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { dbError, type ActionResult } from "@/lib/admin/result";
+import { sendEmail, sendSms } from "@/lib/notifications/providers";
 import { createClient } from "@/lib/supabase/server";
 import { pinSchema } from "@/lib/validation/submission";
 
@@ -114,4 +115,33 @@ export async function deleteRecipientAction(id: string): Promise<ActionResult> {
   if (error) return dbError(error, "Couldn't remove the recipient.");
   revalidatePath("/admin/settings");
   return { ok: true, message: "Recipient removed." };
+}
+
+/** Send a test email/text to one recipient so the officer can confirm setup. */
+export async function sendTestAction(id: string): Promise<ActionResult> {
+  const supabase = await createClient();
+  const { data: r, error } = await supabase
+    .from("alert_recipients")
+    .select("name, email, phone_e164, notify_email, notify_sms")
+    .eq("id", id)
+    .single();
+  if (error || !r) return dbError(error, "Recipient not found.");
+
+  const results: string[] = [];
+  if (r.notify_email && r.email) {
+    const res = await sendEmail({
+      to: r.email,
+      subject: "MERT Equipment: test alert",
+      text: `Hi ${r.name}, this is a test. Alert emails from the MERT Equipment portal will look like this.`,
+      html: `<p>Hi ${r.name.replace(/[<>&]/g, "")},</p><p>This is a test. Alert emails from the MERT Equipment portal will reach you here.</p>`,
+    });
+    results.push(`email ${res.status}${res.error && res.status !== "sent" ? ` (${res.error})` : ""}`);
+  }
+  if (r.notify_sms && r.phone_e164) {
+    const res = await sendSms({ to: r.phone_e164, body: `MERT Equipment: test text for ${r.name}. Urgent alerts will arrive like this.` });
+    results.push(`text ${res.status}${res.error && res.status !== "sent" ? ` (${res.error})` : ""}`);
+  }
+  if (results.length === 0) return { ok: false, error: "Turn on email or text for this person first." };
+  const anySent = results.some((x) => x.includes(" sent"));
+  return anySent ? { ok: true, message: `Test: ${results.join(", ")}` } : { ok: false, error: `Test: ${results.join(", ")}` };
 }

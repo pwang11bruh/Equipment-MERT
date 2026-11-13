@@ -3,6 +3,9 @@
 Newest first. Format: `YYYY-MM-DD: summary (area)`.
 
 ## 2026-11-13
+- Phase 4: Resend/Twilio providers, urgent and digest alert dispatch, `/api/cron/daily`, `vercel.json` cron, and Settings provider status plus "send test" (app).
+- Phase 5: `/admin/reports` (charts, per-item table) and CSV exports (app).
+- Fix: the app font fell back to serif because the Geist CSS variables were scoped to `<body>`; they are now on `<html>` (app).
 - Phase 3: admin dashboard, inventory, item detail with batch actions, new item, alerts inbox, submissions log, and full settings. Migration 0500 `admin_move_next_batch` was added and pushed (app/db).
 - Phase 2: the `/submit` member flow (PIN gate, A–Z search picker with synonyms, steppers, replacement causes, success and discrepancy messaging, lock); admin username login; protected admin layout; placeholder dashboard; Settings → member PIN (app).
 - Migration 0400 pushed to the hosted project; the catalog is live (ops).

@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { byName } from "@/lib/admin/format";
+import { emailConfigured, smsConfigured } from "@/lib/notifications/providers";
 import { createClient } from "@/lib/supabase/server";
 
 import { AlertSettingsForm } from "./alert-settings-form";
@@ -51,6 +52,7 @@ export default async function SettingsPage() {
           </CardHeader>
           <CardContent>
             <AlertSettingsForm
+              providers={{ email: emailConfigured(), sms: smsConfigured() }}
               initial={{
                 expirationWarningDays: settings.expiration_warning_days,
                 smsMinSeverity: settings.sms_min_severity,

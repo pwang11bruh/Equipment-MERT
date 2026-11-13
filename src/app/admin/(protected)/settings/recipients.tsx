@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 
-import { deleteRecipientAction, saveRecipientAction, type RecipientInput } from "./actions";
+import { deleteRecipientAction, saveRecipientAction, sendTestAction, type RecipientInput } from "./actions";
 
 export interface Recipient {
   id: string;
@@ -79,6 +79,22 @@ export function Recipients({ recipients }: { recipients: Recipient[] }) {
                 {r.notify_email && <Badge variant="secondary">email</Badge>}
                 {r.notify_sms && <Badge variant="secondary">text</Badge>}
               </div>
+              <Button
+                size="icon"
+                variant="ghost"
+                aria-label={`Send test to ${r.name}`}
+                title="Send a test message"
+                disabled={pending}
+                onClick={() =>
+                  start(async () => {
+                    const res = await sendTestAction(r.id);
+                    if (!res.ok) toast.error(res.error);
+                    else toast.success(res.message);
+                  })
+                }
+              >
+                <Send />
+              </Button>
               <Button size="icon" variant="ghost" onClick={() => edit(r)} aria-label={`Edit ${r.name}`}>
                 <Pencil />
               </Button>

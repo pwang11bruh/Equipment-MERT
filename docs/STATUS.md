@@ -1,7 +1,7 @@
 # Project Status
 
 **Last updated:** 2026-11-13
-**Current phase:** Phase 3 (admin portal) is ✅ built and waiting on owner click-through testing. Phase 4 (email/SMS notifications) is next.
+**Current phase:** Phases 1–5 are built. Phase 4 email and SMS are waiting on owner accounts (Resend, Twilio). Next: deploy (GitHub, then Vercel).
 
 ## Current state
 
@@ -53,6 +53,15 @@
   - Verified: typecheck, lint and build pass, and every page query runs against the live DB.
   - Not yet verified: click-through as the admin. The agent can't sign in, because the admin password is known only to the owner.
 
+- **Phase 4 (notifications) is built:**
+  - the provider wrappers
+  - the urgent/digest dispatcher
+  - `/api/cron/daily`, tested: 401 without the secret; with it, it refreshes alerts and logs "skipped" sends because no providers are configured
+  - `vercel.json` cron
+  - Settings provider status and "send test"
+- **Phase 5 (reports) is built:** `/admin/reports` (charts verified visually with sample data in headless Chrome), the per-item table, and CSV exports. `/api/export/*` returns 401 without admin.
+- **Fixed:** the app-wide serif font bug (Geist variables moved to `<html>`).
+
 ### Pending
 - The member PIN is not set yet. Until it is, `verify_member_pin` always fails. The owner will set it from the admin Settings page (Phase 3), or we add a minimal settings page earlier.
 - **Catalog:** migration 0400 is **pushed to the hosted project** and verified: 115 items in 10 categories. All par and minimum thresholds are 0 (alerts off) until the owner sets them in the admin UI. No stock (lots) has been entered yet.
@@ -62,21 +71,19 @@
 - There is no git remote (GitHub) yet; Vercel deployment will need one.
 
 ## Next up
-1. **Owner test of Phase 3:**
-   - set pars and minimums ("Edit pars & minimums")
-   - receive stock into Backstock
-   - press "Move next batch"
-   - try the batch actions
-   - acknowledge and resolve alerts
-   - add alert recipients
-   Clear out early test submissions/alerts if wanted.
-2. **Phase 4 (notifications):** Resend (email) and Twilio (SMS) accounts, `/api/cron/daily`, and an immediate dispatch for critical alerts.
-3. **Deploy:** GitHub repo, then Vercel, so members' phones can reach it.
-4. **Phase 5:** reports and CSV export.
+1. **Deploy:**
+   - create a private GitHub repo and push
+   - import it into Vercel
+   - set the env vars (ENVIRONMENT.md), including `CRON_SECRET` and `NEXT_PUBLIC_APP_URL`
+   - set the Supabase Auth Site URL to the Vercel URL
+2. **Owner:** create Resend and Twilio accounts and add the keys. Test with Settings → "send test".
+3. **Owner:** enter real stock and pars; clear test submissions before go-live.
+4. **Hardening (Phase 6):** a committed SQL test script, Playwright e2e for `/submit`, a submission-reversal RPC, and a PWA manifest.
 
 ## Known issues / caveats
 - **Shared admin account:** the audit trail cannot distinguish which admin acted; the ledger `actor` is always `'admin'`. This is accepted per the owner's decision (ADR-002).
 - **Units-issued assumption:** `process_submission` assumes members took the earliest-expiring room units. This normally holds because the room only holds the earliest batch, unless the room has two batches after a partial refill. Periodic counts with `admin_adjust_lot` correct any drift.
 - **FEFO rebalance tie-break:** when room and backstock lots share the same expiration date, the tie is broken by received date, so it may write a no-op-looking swap between equal-dated lots. This is harmless.
 - **Vercel Hobby cron frequency:** Vercel Hobby cron runs at most once a day. That is fine for the daily digest. Immediate critical alerts will be sent inline after a submission (Phase 4).
+- **Notification log grows daily while providers are unset:** each run logs `skipped` rows for pending alerts. This is harmless; consider pruning once providers are live.
 - **Local Docker:** not installed. Local SQL testing uses Homebrew `postgresql@17` (BUSINESS_LOGIC.md §7).

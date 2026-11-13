@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
 import { clientHash, endMemberSession, hasMemberSession, startMemberSession } from "@/lib/member-session";
+import { dispatchAlerts } from "@/lib/notifications/dispatch";
 import { createServiceClient } from "@/lib/supabase/service";
 import { pinSchema, submissionSchema, type SubmissionInput } from "@/lib/validation/submission";
 import type { SubmissionResult } from "@/types/domain";
@@ -78,6 +80,16 @@ export async function submitUsageAction(input: SubmissionInput): Promise<SubmitR
     const message = error.code === "22023" ? error.message : "Couldn't save your submission. Please try again.";
     return { ok: false, error: message };
   }
+
+  // A submission can push the Equipment Room to zero -> critical alert. Send
+  // urgent notifications after the response so the member isn't kept waiting.
+  after(async () => {
+    try {
+      await dispatchAlerts("urgent");
+    } catch (e) {
+      console.error("urgent dispatch failed", e);
+    }
+  });
 
   return { ok: true, result: data as unknown as SubmissionResult };
 }

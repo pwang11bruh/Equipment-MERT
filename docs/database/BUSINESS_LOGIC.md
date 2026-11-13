@@ -79,7 +79,7 @@ When it runs:
 - daily from cron (Phase 4)
 - on demand via `refresh_alerts()`
 
-## 5. Notifications (Phase 4; design is settled, not yet built)
+## 5. Notifications (`src/lib/notifications/dispatch.ts`)
 An alert should be notified when it is `open` **and** either `last_notified_severity is null` or `severity > last_notified_severity`.
 
 Who gets it:
@@ -92,6 +92,11 @@ Channels by severity:
 - **at or above `sms_min_severity` (default `critical`):** email and SMS
 
 After sending, set `last_notified_severity` and `last_notified_at`, and write one row per attempt to `notification_log`. The toggles `app_settings.email_enabled` and `sms_enabled` are respected.
+- **Two modes:**
+  - **urgent:** runs right after each member submission, via `after()`. It sends only alerts at or above `sms_min_severity`.
+  - **digest:** the daily cron. It sends everything pending at warning or above.
+- **Nothing is lost while providers are missing.** An alert is marked notified only if at least one message about it was actually **sent**. While Resend or Twilio isn't configured, sends are logged as `skipped` and the alert stays pending.
+- The SMS body is capped at about 600 characters and ends with a link to `/admin/alerts`.
 
 ## 6. Analytics (`v_monthly_item_usage`, from `inventory_movements`)
 | Metric | Definition |

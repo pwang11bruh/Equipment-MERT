@@ -14,8 +14,10 @@ import { saveAlertSettingsAction } from "./actions";
 
 export function AlertSettingsForm({
   initial,
+  providers,
 }: {
   initial: { expirationWarningDays: number; smsMinSeverity: AlertSeverity; emailEnabled: boolean; smsEnabled: boolean };
+  providers: { email: boolean; sms: boolean };
 }) {
   const [days, setDays] = useState(String(initial.expirationWarningDays));
   const [smsMin, setSmsMin] = useState<AlertSeverity>(initial.smsMinSeverity);
@@ -61,10 +63,18 @@ export function AlertSettingsForm({
           </SelectContent>
         </Select>
       </div>
-      <p className="text-muted-foreground text-xs">
-        Email and text sending is switched on in a later step (needs Resend and Twilio accounts). Until then, alerts
-        appear on the dashboard and Alerts page only.
-      </p>
+      <ul className="text-muted-foreground space-y-0.5 text-xs">
+        <li>
+          Email service: {providers.email ? <b className="text-green-700">connected</b> : <b>not connected yet</b>}
+        </li>
+        <li>
+          Text service: {providers.sms ? <b className="text-green-700">connected</b> : <b>not connected yet</b>}
+        </li>
+        <li>
+          Until a service is connected, its alerts wait (nothing is lost) and still show on the dashboard. Warnings
+          go out in a daily email; urgent alerts are sent right away.
+        </li>
+      </ul>
       <div>
         <Button type="submit" disabled={pending}>
           {pending ? "Saving…" : "Save alert settings"}

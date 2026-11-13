@@ -36,16 +36,17 @@ Tick each box when it is done, in the same change as the code, and keep [STATUS.
 - [ ] Owner click-through test of every admin action (agent can't sign in: no access to the admin password)
 
 ## Phase 4: Notifications
-- [ ] `src/lib/notifications/{email,sms,dispatch}.ts` (Resend, Twilio)
-- [ ] `/api/cron/daily`: `refresh_alerts`, then a digest email per recipient (routed by `alerts.audience`) and SMS for alerts at or above `sms_min_severity`; update `last_notified_*`; write to `notification_log`
-- [ ] Immediate dispatch of critical alerts after a submission (`after()` in the server action)
-- [ ] `vercel.json` cron schedule
+- [x] `src/lib/notifications/providers.ts` (Resend and Twilio over plain `fetch`; "skipped" when not configured) and `dispatch.ts`
+- [x] `/api/cron/daily`: `refresh_alerts`, then a digest email per recipient (routed by `alerts.audience`) and SMS at or above `sms_min_severity`; updates `last_notified_*`; writes `notification_log`
+- [x] Immediate ("urgent") dispatch after a member submission (`after()` in `submitUsageAction`)
+- [x] `vercel.json` cron schedule (daily 12:00 UTC)
+- [x] Settings: provider connection status and a per-recipient "send test" button
+- [ ] **Owner:** create Resend (verify a sending domain) and Twilio (A2P 10DLC) accounts, then add the keys to `.env.local` and Vercel
 
 ## Phase 5: Reporting & analytics
-- [ ] Usage trends chart (issued per month and per item/category; restock vs replacement)
-- [ ] Restock frequency: member submissions and officer room refills per item per month
-- [ ] Spend analysis: purchases, issued cost and waste (expired/broken/damaged) cost
-- [ ] CSV export for inventory, movements and usage
+- [x] `/admin/reports` with a 3/6/12/24-month range, stat tiles, and three charts: units taken per month (restock vs replacement), spending per month (purchases vs waste), and the top 10 items
+- [x] Per-item table (A–Z by default, sortable): units taken, replacements, submissions, room refills, purchased, waste, and per month
+- [x] CSV export: `/api/export/{inventory,usage,movements}` (admin only, with formula-injection guard)
 
 ## Phase 6: Deploy & hardening
 - [ ] Create the production Supabase project; `supabase db push`
