@@ -55,7 +55,7 @@ It is idempotent and recomputes every condition from scratch. `audience` decides
 
 | Type | Condition | Severity | Audience | Key |
 | --- | --- | --- | --- | --- |
-| `low_stock_room` | `room_par_qty > 0` and usable room qty < par | critical if 0, else warning | **all** (officer + board) | `low_room:<item>` |
+| `low_stock_room` | `room_par_qty > 0` and usable room qty **≤ par**: it fires as soon as the count *reaches* par (migration 0600) | critical if 0, else warning | **all** (officer + board) | `low_room:<item>` |
 | `low_stock_backstock` | `min_backstock_qty > 0` and usable backstock < min | critical if 0, else warning | **all** (officer + board) | `low_backstock:<item>` |
 | `expired` | functional lot past its expiry | critical in room, warning in backstock | equipment_officer | `expired:<lot>` |
 | `expiring_soon` | expires within `expiration_warning_days` (default 60 ≈ 2 months) | warning | equipment_officer | `expiring:<lot>` |
@@ -67,6 +67,8 @@ It is idempotent and recomputes every condition from scratch. `audience` decides
 The `low_stock_room` message follows the owner's wording:
 - *"Equipment Room Gauze Pads 4x4 is low (5 of 40 each). Move next batch (Exp: 2028-07-05, 100 each) from Backstock."*
 - When there is no usable backstock: *"… No usable backstock — reorder."*
+
+Because the alert fires *at* par, it only clears once the room is restocked **above** par. The "Move next batch" dialog suggests at least `par − room + 1`.
 
 Lifecycle:
 - **Insert or update by key.** The message is refreshed, and an acknowledged alert whose severity escalates is re-opened.
@@ -94,8 +96,8 @@ Channels by severity:
 After sending, set `last_notified_severity` and `last_notified_at`, and write one row per attempt to `notification_log`. The toggles `app_settings.email_enabled` and `sms_enabled` are respected.
 - **Two modes:**
   - **urgent:** runs right after each member submission and each admin batch action (dispose, adjust, move, status), via `after()`. Threshold edits do not trigger it.
-    - It emails alerts at or above `sms_min_severity`, **plus every `low_stock_room` alert ("Equipment Room X is low"), whatever its severity** (owner request, 2026-11-13: email immediately when an item drops below par).
-    - SMS still goes only to alerts at or above `sms_min_severity`.
+    - It sends alerts at or above `sms_min_severity`, **plus every `low_stock_room` alert ("Equipment Room X is low"), by email AND text, whatever its severity** (owner request, 2026-11-13: notify immediately when an item reaches par).
+    - Other alerts are texted only at or above `sms_min_severity`.
   - **digest:** the daily cron. It sends everything pending at warning or above.
 - **Nothing is lost while providers are missing.** An alert is marked notified only if at least one message about it was actually **sent**. While Resend or Twilio isn't configured, sends are logged as `skipped` and the alert stays pending.
 - The SMS body is capped at about 600 characters and ends with a link to `/admin/alerts`.

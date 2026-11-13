@@ -24,19 +24,20 @@ type Filter = "all" | "attention" | "below_par" | "reorder" | "expiry" | "oos" |
 const FILTERS: { value: Filter; label: string; test: (r: InventoryRow) => boolean }[] = [
   { value: "all", label: "All", test: () => true },
   { value: "attention", label: "Needs attention", test: (r) => flags(r).length > 0 },
-  { value: "below_par", label: "Room below par", test: (r) => belowPar(r) },
+  { value: "below_par", label: "Room at/below par", test: (r) => belowPar(r) },
   { value: "reorder", label: "Reorder", test: (r) => needsReorder(r) },
   { value: "expiry", label: "Expiring / expired", test: (r) => r.expired_qty > 0 || r.expiring_soon_qty > 0 },
   { value: "oos", label: "Out of service", test: (r) => r.out_of_service_qty > 0 },
   { value: "no_par", label: "Par not set", test: (r) => r.room_par_qty === 0 },
 ];
 
-const belowPar = (r: InventoryRow) => r.room_par_qty > 0 && r.room_qty < r.room_par_qty;
+/** Alert fires when the room count reaches par (migration 0600). */
+const belowPar = (r: InventoryRow) => r.room_par_qty > 0 && r.room_qty <= r.room_par_qty;
 const needsReorder = (r: InventoryRow) => r.min_backstock_qty > 0 && r.backstock_qty < r.min_backstock_qty;
 
 function flags(r: InventoryRow) {
   const f: { label: string; tone: "destructive" | "secondary" | "outline" }[] = [];
-  if (belowPar(r)) f.push({ label: r.room_qty === 0 ? "Room empty" : "Below par", tone: "destructive" });
+  if (belowPar(r)) f.push({ label: r.room_qty === 0 ? "Room empty" : "At/below par", tone: "destructive" });
   if (needsReorder(r)) f.push({ label: "Reorder", tone: "secondary" });
   if (r.expired_qty > 0) f.push({ label: `${r.expired_qty} expired`, tone: "destructive" });
   if (r.expiring_soon_qty > 0) f.push({ label: `${r.expiring_soon_qty} expiring`, tone: "secondary" });
@@ -136,7 +137,7 @@ export function InventoryTable({ rows }: { rows: InventoryRow[] }) {
 
       {editing && (
         <p className="text-muted-foreground text-sm">
-          <b>Room par</b>: the Equipment Room alerts the officer and board when it drops below this.{" "}
+          <b>Room par</b>: the officer and board get an email and text as soon as the Equipment Room count reaches this.{" "}
           <b>Backstock min</b>: reorder alert below this. Use 0 to turn an alert off.
         </p>
       )}

@@ -54,7 +54,8 @@ export default async function ItemDetailPage({ params }: { params: Promise<{ id:
       (a.fefo_rank ?? 9999) - (b.fefo_rank ?? 9999) ||
       (a.expiration_date ?? "9999").localeCompare(b.expiration_date ?? "9999"),
   );
-  const shortfall = Math.max(stock.room_par_qty - stock.room_qty, 0);
+  // Alert clears only once the room is ABOVE par (fires at par, migration 0600).
+  const shortfall = stock.room_par_qty > 0 ? Math.max(stock.room_par_qty - stock.room_qty + 1, 0) : 0;
 
   return (
     <div className="space-y-6">
@@ -87,7 +88,7 @@ export default async function ItemDetailPage({ params }: { params: Promise<{ id:
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <Stat label="Equipment Room" value={stock.room_qty} sub={`par ${stock.room_par_qty || "not set"}`} bad={stock.room_par_qty > 0 && stock.room_qty < stock.room_par_qty} />
+        <Stat label="Equipment Room" value={stock.room_qty} sub={`par ${stock.room_par_qty || "not set"}`} bad={stock.room_par_qty > 0 && stock.room_qty <= stock.room_par_qty} />
         <Stat label="Backstock" value={stock.backstock_qty} sub={`min ${stock.min_backstock_qty || "not set"}`} bad={stock.min_backstock_qty > 0 && stock.backstock_qty < stock.min_backstock_qty} />
         <Stat label="Expired / expiring" value={`${stock.expired_qty} / ${stock.expiring_soon_qty}`} sub="next 60 days" bad={stock.expired_qty > 0} />
         <Stat label="Out of service" value={stock.out_of_service_qty} sub={formatMoney(item.unit_cost) + " each"} />

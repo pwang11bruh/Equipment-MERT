@@ -174,7 +174,7 @@ export function Recipients({ recipients }: { recipients: Recipient[] }) {
                   <Switch checked={editing.form.notifyEmail} onCheckedChange={(v) => set("notifyEmail", v)} /> Email me
                 </label>
                 <label className="flex items-center gap-3 text-sm">
-                  <Switch checked={editing.form.notifySms} onCheckedChange={(v) => set("notifySms", v)} /> Text me (urgent alerts)
+                  <Switch checked={editing.form.notifySms} onCheckedChange={(v) => set("notifySms", v)} /> Text me (room at par, urgent alerts)
                 </label>
                 <label className="flex items-center gap-3 text-sm">
                   <Switch checked={editing.form.isActive} onCheckedChange={(v) => set("isActive", v)} /> Active

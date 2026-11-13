@@ -3,6 +3,7 @@
 Newest first. Format: `YYYY-MM-DD: summary (area)`.
 
 ## 2026-11-13
+- The room alert now fires when the count reaches par (migration 0600, pushed) and is sent by email **and** text immediately (db/app).
 - Equipment Room below-par alerts are now emailed immediately, after member submissions and admin batch actions, instead of waiting for the daily digest (app).
 - Phase 4: Resend/Twilio providers, urgent and digest alert dispatch, `/api/cron/daily`, `vercel.json` cron, and Settings provider status plus "send test" (app).
 - Phase 5: `/admin/reports` (charts, per-item table) and CSV exports (app).

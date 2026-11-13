@@ -70,7 +70,7 @@ export function MoveNextBatchDialog({
           <div className="space-y-1.5">
             <Label htmlFor="mq">How many did you move? (max {batchQty})</Label>
             <Input id="mq" type="number" inputMode="numeric" min={1} max={batchQty} value={quantity} onChange={(e) => setQuantity(e.target.value)} autoFocus />
-            {suggested > 0 && <p className="text-muted-foreground text-xs">{suggested} needed to reach par.</p>}
+            {suggested > 0 && <p className="text-muted-foreground text-xs">Move at least {suggested} to get above par and clear the alert.</p>}
           </div>
           <DialogFooter>
             <Button type="submit" disabled={pending}>

@@ -10,6 +10,7 @@ Source of truth: `supabase/migrations/*.sql`. This file explains it. Update it w
 | `20261113000300_security.sql` | Grants, RLS enablement, policies |
 | `20261113000400_catalog_and_optional_expiry.sql` | Real catalog (115 items, 10 categories). `admin_receive_stock` no longer requires an expiry date. |
 | `20261113000500_move_next_batch.sql` | `admin_move_next_batch(item, qty?)` |
+| `20261113000600_room_alert_at_par.sql` | Redefines `_refresh_alerts`: the room alert fires at `room_qty <= par` |
 
 ## Entity overview
 ```

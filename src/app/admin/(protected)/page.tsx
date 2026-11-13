@@ -30,7 +30,7 @@ export default async function AdminDashboard() {
   ]);
 
   const stock = (stockData ?? []) as unknown as ItemStock[];
-  const belowPar = stock.filter((s) => s.room_par_qty > 0 && s.room_qty < s.room_par_qty).length;
+  const belowPar = stock.filter((s) => s.room_par_qty > 0 && s.room_qty <= s.room_par_qty).length;
   const reorder = stock.filter((s) => s.min_backstock_qty > 0 && s.backstock_qty < s.min_backstock_qty).length;
   const expiry = stock.filter((s) => s.expired_qty > 0 || s.expiring_soon_qty > 0).length;
   const withPar = stock.filter((s) => s.room_par_qty > 0).length;
@@ -49,7 +49,7 @@ export default async function AdminDashboard() {
       <h1 className="text-2xl font-semibold">Dashboard</h1>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <Kpi label="Room below par" value={belowPar} href="/admin/inventory" bad={belowPar > 0} />
+        <Kpi label="Room at/below par" value={belowPar} href="/admin/inventory" bad={belowPar > 0} />
         <Kpi label="Need reorder" value={reorder} href="/admin/inventory" bad={reorder > 0} />
         <Kpi label="Expiring / expired items" value={expiry} href="/admin/inventory" bad={expiry > 0} />
         <Kpi label="Submissions this week" value={weekCount ?? 0} href="/admin/submissions" />

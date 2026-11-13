@@ -18,10 +18,9 @@ import { sendEmail, sendSms, type SendResult } from "./providers";
  *
  * mode "urgent": sent right away (after a member submission or a stock
  *                change by the admin). Includes alerts at/above
- *                sms_min_severity AND every IMMEDIATE_EMAIL_TYPES alert —
- *                e.g. the Equipment Room dropping below par is emailed
- *                immediately (owner request 2026-11-13); SMS still only goes
- *                out for alerts at/above sms_min_severity.
+ *                sms_min_severity AND every IMMEDIATE_TYPES alert (the
+ *                Equipment Room reaching par is emailed AND texted right away;
+ *                owner request 2026-11-13).
  * mode "digest": everything pending (daily cron).
  *
  * An alert is marked notified only if at least one message about it was
@@ -30,8 +29,12 @@ import { sendEmail, sendSms, type SendResult } from "./providers";
 
 const RANK: Record<AlertSeverity, number> = { info: 0, warning: 1, critical: 2 };
 
-/** Alert types that are emailed immediately instead of waiting for the daily digest. */
-const IMMEDIATE_EMAIL_TYPES: AlertType[] = ["low_stock_room"];
+/**
+ * Alert types sent immediately (email AND text) regardless of severity, instead
+ * of waiting for the daily digest. Owner request 2026-11-13: when an Equipment
+ * Room item reaches par, email and text right away.
+ */
+const IMMEDIATE_TYPES: AlertType[] = ["low_stock_room"];
 
 interface PendingAlert {
   id: string;
@@ -65,7 +68,7 @@ export async function dispatchAlerts(mode: "urgent" | "digest"): Promise<Dispatc
   const pending = (alerts as PendingAlert[])
     .filter((a) => RANK[a.severity] >= RANK.warning)
     .filter((a) => a.last_notified_severity === null || RANK[a.severity] > RANK[a.last_notified_severity])
-    .filter((a) => mode === "digest" || RANK[a.severity] >= smsMin || IMMEDIATE_EMAIL_TYPES.includes(a.alert_type))
+    .filter((a) => mode === "digest" || RANK[a.severity] >= smsMin || IMMEDIATE_TYPES.includes(a.alert_type))
     .sort((a, b) => RANK[b.severity] - RANK[a.severity] || a.title.localeCompare(b.title));
   summary.pendingAlerts = pending.length;
   if (pending.length === 0) return summary;
@@ -90,7 +93,7 @@ export async function dispatchAlerts(mode: "urgent" | "digest"): Promise<Dispatc
       });
     }
 
-    const urgent = mine.filter((a) => RANK[a.severity] >= smsMin);
+    const urgent = mine.filter((a) => RANK[a.severity] >= smsMin || IMMEDIATE_TYPES.includes(a.alert_type));
     if (settings.sms_enabled && r.notify_sms && r.phone_e164 && urgent.length > 0) {
       const body = renderSms(urgent, appUrl);
       record(await sendSms({ to: r.phone_e164, body }), urgent.map((a) => a.id), {

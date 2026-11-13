@@ -84,7 +84,7 @@ export function ItemForm({ item, categories }: { item?: ItemRow; categories: { i
       <div className="space-y-1.5">
         <Label htmlFor="par">Equipment Room par</Label>
         <Input id="par" type="number" min={0} inputMode="numeric" value={form.roomParQty} onChange={(e) => set("roomParQty", e.target.value)} />
-        <p className="text-muted-foreground text-xs">Alert officer + board when the room drops below this. 0 = off.</p>
+        <p className="text-muted-foreground text-xs">Email + text the officer and board as soon as the room count reaches this. 0 = off.</p>
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="min">Backstock minimum</Label>
