@@ -23,7 +23,7 @@ Tick each box when it is done, in the same change as the code, and keep [STATUS.
 - [ ] PWA manifest and icons ("Add to Home Screen")
 
 ## Phase 3: Admin portal
-- [ ] `/admin/login` (email + password, shared account)
+- [ ] `/admin/login` (username + password; username → `<name>@mert.local`, ADR-009)
 - [ ] Admin layout with nav, guarded by `isAdminRequest()`
 - [ ] Dashboard: KPIs, open alerts, FEFO swap list
 - [ ] Inventory: per-item stock table with filters; lot drill-down showing FEFO rank and expiry badges
@@ -47,7 +47,8 @@ Tick each box when it is done, in the same change as the code, and keep [STATUS.
 
 ## Phase 6: Deploy & hardening
 - [ ] Create the production Supabase project; `supabase db push`
-- [ ] Bootstrap the shared admin user and set the production PIN
+- [x] Bootstrap the shared admin user (`mertadmin`)
+- [ ] Set the production member PIN
 - [ ] Deploy to Vercel with env vars and cron
 - [ ] Automated tests for the SQL logic (pgTAP or a script) and e2e tests (Playwright) for the submit flow
 - [ ] Submission reversal RPC (undo a mistaken submission)

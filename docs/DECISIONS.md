@@ -63,3 +63,9 @@ Consequences:
 - **Broken equipment.** A broken item replaced from a bag was never in inventory, so it raises an informational alert instead of creating an out-of-service lot.
 - **Routing.** Alerts carry an `audience`. Low stock in the room or in backstock goes to the officer **and** the board (owner request, 2026-11-13). Everything else (expiring, expired, out of service, FEFO swap, recount, broken equipment) goes to the Equipment Officer only.
 - **Migrations.** The original 0100/0200 migrations were edited in place for this change rather than amended, because they had never been applied to any shared environment.
+
+## ADR-009: Admin logs in with a username mapped to a placeholder email
+**Date:** 2026-11-13 · **Status:** Accepted (owner decision)
+Supabase Auth requires an email address, so the shared admin account is `mertadmin@mert.local`. That domain is not real, and the account was created with auto-confirm.
+- The `/admin/login` form asks for a **Username**. If the input has no `@`, the app appends `@mert.local` before calling `signInWithPassword`.
+- **Consequence:** password-reset emails cannot be delivered. To change the password, use Supabase Dashboard → Authentication → Users → the user → update password. Do not build a "Forgot password" link.

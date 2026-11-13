@@ -3,6 +3,7 @@
 Newest first. Format: `YYYY-MM-DD: summary (area)`.
 
 ## 2026-11-13
+- Shared admin `mertadmin@mert.local` registered in `admin_users`; public sign-ups confirmed disabled; ADR-009 username login (ops).
 - Hosted Supabase project `szaapavpgjrtatfmpuug` linked and migrations pushed. Generated `src/types/database.ts`; Supabase clients are now typed (ops/app).
 - Equipment Room low-stock alerts (`low_stock_room`) now notify the Equipment Officer and the board (`audience = 'all'`) (db).
 - Storage model changed to Equipment Room + locked Backstock (ADR-008). Members issue from the room; the officer gets a "move next batch" alert; FEFO is enforced on room transfers; alerts gained an `audience` column. Migrations 0100/0200 were edited in place, since none had been applied anywhere yet (db).

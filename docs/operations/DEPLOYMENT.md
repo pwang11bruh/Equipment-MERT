@@ -6,7 +6,9 @@ Status as of 2026-11-13:
   - ✅ Linked and migrations 0100–0300 pushed.
   - ✅ API keys are in `.env.local`.
   - ✅ Live RLS check passed: anon is denied on tables, views and RPCs.
-  - ⏳ Admin bootstrap, PIN and catalog are still to do.
+  - ✅ Admin bootstrapped: `mertadmin@mert.local` (login username `mertadmin`) is in `admin_users`.
+  - ✅ Public sign-ups are disabled.
+  - ⏳ Member PIN and catalog are still to do.
 - **Vercel:** not deployed. There is no GitHub remote yet.
 
 Update this file as each step is done.

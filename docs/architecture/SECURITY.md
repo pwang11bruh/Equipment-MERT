@@ -30,6 +30,7 @@ Functions are deny-by-default: migration 0300 revokes EXECUTE from `public`, `an
 - Public signups are disabled (`supabase/config.toml` → `[auth] enable_signup = false`). **Also disable them in the production dashboard** (Authentication → Providers / Sign In).
 - Bootstrap steps are in operations/DEPLOYMENT.md: create the user in the dashboard, then insert its id into `admin_users`.
 - Because the account is shared, the ledger `actor` is always `'admin'`. Rotate the password when an officer leaves.
+- **Username login (ADR-009):** the account is `mertadmin@mert.local`, and admins type just `mertadmin`. Password resets are done in the Supabase dashboard, because email can't be delivered to that address.
 
 ## Secrets checklist
 - `SUPABASE_SERVICE_ROLE_KEY`, `MEMBER_SESSION_SECRET`, `CRON_SECRET`, `RESEND_API_KEY` and `TWILIO_AUTH_TOKEN` must stay server-side. Never prefix them with `NEXT_PUBLIC_`.

@@ -42,10 +42,11 @@
   - The live check passed: anon is denied on tables, views and RPCs; the service role works.
 - `src/types/database.ts` is generated from the live project, and all Supabase clients are typed with `Database`.
 
-### In progress (owner actions in the Supabase dashboard)
-- Create the shared admin user, then insert its id into `admin_users` (DEPLOYMENT.md §1.4).
-- Turn off "Allow new users to sign up". `config.toml` only covers local.
-- The member PIN is not set yet. Until it is, `verify_member_pin` always fails.
+- **Admin account bootstrapped:** auth user `mertadmin@mert.local` (confirmed) is registered in `admin_users`. Admins log in with the username **`mertadmin`** (ADR-009).
+- Public sign-ups are **disabled** on the hosted project (verified via the Management API: `disable_signup = true`).
+
+### Pending
+- The member PIN is not set yet. Until it is, `verify_member_pin` always fails. The owner will set it from the admin Settings page (Phase 3), or we add a minimal settings page earlier.
 - The catalog is empty: no seed has run in production.
 
 ### Not done yet
