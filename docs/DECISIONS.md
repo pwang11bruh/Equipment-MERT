@@ -55,11 +55,11 @@ The locations are `equipment_room` and `backstock`.
 
 How it works:
 - A member submission **issues** items from the equipment room. They leave inventory, because bags are not tracked.
-- When the room drops below `room_par_qty`, the Equipment Officer gets: *"Equipment Room X is low. Move next batch (Exp: D) from Backstock."*
+- When the room drops below `room_par_qty`, the Equipment Officer and the board get: *"Equipment Room X is low. Move next batch (Exp: D) from Backstock."*
 - FEFO is enforced when stock goes into the room (`_assert_room_fefo`).
 
 Consequences:
 - **No member-side shortfall.** Members cannot take from backstock. If they take more than the records show in the room, that is a *discrepancy*, which means a recount is needed.
 - **Broken equipment.** A broken item replaced from a bag was never in inventory, so it raises an informational alert instead of creating an out-of-service lot.
-- **Routing.** Alerts carry an `audience`. Operational alerts go to the Equipment Officer; reorder (low backstock) alerts go to the officer and the board.
+- **Routing.** Alerts carry an `audience`. Low stock in the room or in backstock goes to the officer **and** the board (owner request, 2026-11-13). Everything else (expiring, expired, out of service, FEFO swap, recount, broken equipment) goes to the Equipment Officer only.
 - **Migrations.** The original 0100/0200 migrations were edited in place for this change rather than amended, because they had never been applied to any shared environment.

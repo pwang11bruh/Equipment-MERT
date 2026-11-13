@@ -395,11 +395,12 @@ begin
   ),
   cond as (
     -- Equipment room below par -> Equipment Officer moves the next batch
+    -- (notifies officer + board, per owner request 2026-11-13)
     select
       'low_room:' || item_id as dedupe_key,
       'low_stock_room'::public.alert_type as alert_type,
       (case when room_qty = 0 then 'critical' else 'warning' end)::public.alert_severity as severity,
-      'equipment_officer'::public.alert_audience as audience,
+      'all'::public.alert_audience as audience,
       item_id, next_batch_lot as lot_id,
       format('Equipment Room %s is low', name) as title,
       case

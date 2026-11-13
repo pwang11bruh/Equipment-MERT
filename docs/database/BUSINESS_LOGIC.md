@@ -48,7 +48,7 @@ It is idempotent and recomputes every condition from scratch. `audience` decides
 
 | Type | Condition | Severity | Audience | Key |
 | --- | --- | --- | --- | --- |
-| `low_stock_room` | `room_par_qty > 0` and usable room qty < par | critical if 0, else warning | equipment_officer | `low_room:<item>` |
+| `low_stock_room` | `room_par_qty > 0` and usable room qty < par | critical if 0, else warning | **all** (officer + board) | `low_room:<item>` |
 | `low_stock_backstock` | `min_backstock_qty > 0` and usable backstock < min | critical if 0, else warning | **all** (officer + board) | `low_backstock:<item>` |
 | `expired` | functional lot past its expiry | critical in room, warning in backstock | equipment_officer | `expired:<lot>` |
 | `expiring_soon` | expires within `expiration_warning_days` (default 60 ≈ 2 months) | warning | equipment_officer | `expiring:<lot>` |

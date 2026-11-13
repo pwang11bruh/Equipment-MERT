@@ -11,7 +11,7 @@
   - The **Equipment Room** is the member-accessible pool; FEFO is enforced so only the earliest-expiring batch goes in.
   - **Backstock** is the locked reserve.
   - Members' submissions *issue* items from the room.
-  - Below par, the Equipment Officer gets *"Equipment Room X is low. Move next batch (Exp: D) from Backstock."*
+  - Below par, the Equipment Officer and the board get *"Equipment Room X is low. Move next batch (Exp: D) from Backstock."*
 - **Database schema is complete and tested** (`supabase/migrations/`):
   - `0100_core_schema`: enums, tables and indexes.
   - `0200_inventory_logic`: views, lot primitives, `process_submission`, the admin RPCs (FEFO-gated transfers), the alerts engine with audience routing, and the PIN verification.
