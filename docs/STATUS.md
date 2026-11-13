@@ -1,7 +1,7 @@
 # Project Status
 
 **Last updated:** 2026-11-13
-**Current phase:** Phase 2 (member submission portal) is ✅ built and waiting on owner testing. Phase 3 (admin portal) is next.
+**Current phase:** Phase 3 (admin portal) is ✅ built and waiting on owner click-through testing. Phase 4 (email/SMS notifications) is next.
 
 ## Current state
 
@@ -49,6 +49,10 @@
   - Smoke-tested against the live project: routes and redirects work, the catalog renders (115 items A–Z) only behind a valid PIN cookie, no stock fields reach members, and a tampered cookie is rejected.
   - Not yet tested: an end-to-end real submission (it would write to the live DB) and real phones.
 
+- **Phase 3 is built:** dashboard, inventory (A–Z, filters, bulk pars), item page (batches, receive, move next batch, batch actions, FEFO swap, settings, history), new item, alerts inbox, submissions log, and full settings (PIN, recipients, alert options). Migration 0500 (`admin_move_next_batch`) is pushed.
+  - Verified: typecheck, lint and build pass, and every page query runs against the live DB.
+  - Not yet verified: click-through as the admin. The agent can't sign in, because the admin password is known only to the owner.
+
 ### Pending
 - The member PIN is not set yet. Until it is, `verify_member_pin` always fails. The owner will set it from the admin Settings page (Phase 3), or we add a minimal settings page earlier.
 - **Catalog:** migration 0400 is **pushed to the hosted project** and verified: 115 items in 10 categories. All par and minimum thresholds are 0 (alerts off) until the owner sets them in the admin UI. No stock (lots) has been entered yet.
@@ -58,17 +62,17 @@
 - There is no git remote (GitHub) yet; Vercel deployment will need one.
 
 ## Next up
-1. **Owner:** sign in at `/admin/login` as `mertadmin` and set the member PIN under Settings.
-2. **Owner:** try `/submit` on a phone. Until stock is entered, every submission is flagged with a "recount" alert, because the Equipment Room is empty in the records.
-3. **Phase 3 (admin portal):**
-   - inventory table
-   - receive stock, with expiry or a "no expiry" checkbox
-   - the "Move next batch to Equipment Room" action
-   - par and minimum editing per item
-   - alerts inbox (acknowledge / resolve)
-   - submissions log
-   Initial stock counts can then be entered.
-4. Deploy to Vercel (needs a GitHub repo) so phones can reach it outside `localhost`.
+1. **Owner test of Phase 3:**
+   - set pars and minimums ("Edit pars & minimums")
+   - receive stock into Backstock
+   - press "Move next batch"
+   - try the batch actions
+   - acknowledge and resolve alerts
+   - add alert recipients
+   Clear out early test submissions/alerts if wanted.
+2. **Phase 4 (notifications):** Resend (email) and Twilio (SMS) accounts, `/api/cron/daily`, and an immediate dispatch for critical alerts.
+3. **Deploy:** GitHub repo, then Vercel, so members' phones can reach it.
+4. **Phase 5:** reports and CSV export.
 
 ## Known issues / caveats
 - **Shared admin account:** the audit trail cannot distinguish which admin acted; the ledger `actor` is always `'admin'`. This is accepted per the owner's decision (ADR-002).

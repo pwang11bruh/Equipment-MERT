@@ -465,6 +465,9 @@ isOneToOne: false
 "admin_fefo_rebalance":
 { Args: { "p_item_id": string }; Returns: number
                            },
+"admin_move_next_batch":
+{ Args: { "p_item_id": string,"p_quantity"?: number }; Returns: number
+                           },
 "admin_receive_stock":
 { Args: { "p_expiration_date"?: string,"p_item_id": string,"p_location"?: Database["public"]['Enums']["inventory_location"],"p_lot_number"?: string,"p_notes"?: string,"p_quantity": number,"p_received_on"?: string,"p_unit_cost"?: number }; Returns: string
                            },

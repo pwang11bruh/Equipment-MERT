@@ -26,15 +26,14 @@ Tick each box when it is done, in the same change as the code, and keep [STATUS.
 ## Phase 3: Admin portal
 - [x] `/admin/login` (username + password; username → `<name>@mert.local`, ADR-009)
 - [x] Admin layout with nav, guarded by `isAdminRequest()`
-- [x] Placeholder dashboard (open alerts + recent submissions)
-- [ ] Dashboard: KPIs, open alerts, FEFO swap list
-- [ ] Inventory: per-item stock table with filters; lot drill-down showing FEFO rank and expiry badges
-- [ ] Lot actions: receive, "Move next batch to Equipment Room" (one tap from the alert), transfer, mark out-of-service or functional, dispose, adjust count, "Mark swapped" (FEFO rebalance)
-- [ ] Item catalog CRUD (thresholds, unit cost, archive)
-- [ ] Submissions log with flagged filter
-- [ ] Alerts page: acknowledge and resolve
-- [x] Settings: member PIN
-- [ ] Settings: expiration warning days, SMS threshold, alert recipients CRUD
+- [x] Dashboard: KPIs, setup checklist, open alerts, recent submissions
+- [x] Inventory: A–Z stock table with search, filter chips and bulk "Edit pars & minimums"; item page with FEFO-ranked batches and expiry badges
+- [x] Batch actions: receive (expiry or "no expiry"), "Move next batch" (`admin_move_next_batch`, migration 0500), move between locations, mark out-of-service or functional, dispose, correct count, "I swapped them" (FEFO rebalance)
+- [x] Item catalog: create, edit and archive (thresholds, unit cost, vendor, member hint, flags)
+- [x] Submissions log with a flagged filter and pagination
+- [x] Alerts inbox: open / acknowledged / resolved tabs, bulk acknowledge and resolve, re-check now
+- [x] Settings: member PIN, expiration warning days, SMS threshold, email/SMS toggles, alert recipients CRUD
+- [ ] Owner click-through test of every admin action (agent can't sign in: no access to the admin password)
 
 ## Phase 4: Notifications
 - [ ] `src/lib/notifications/{email,sms,dispatch}.ts` (Resend, Twilio)

@@ -29,6 +29,7 @@ Par checks, FEFO ranking and issuing only consider usable units. Expired units s
   - Out-of-service and expired stock can never go into the room.
 - **Highlight:** `v_lots.fefo_rank` is computed across both locations (1 = use next). `v_next_backstock_batch` gives the batch the officer should move next. A batch is all usable backstock units sharing the earliest expiry.
 - **Detect drift:** stock with an *earlier* date can be received into backstock after the room was filled. `v_fefo_violations` catches this, and `_refresh_alerts` raises a `fefo_violation` alert (warning).
+- **Move next batch:** `admin_move_next_batch(item, qty?)` is the one-tap response to the low-room alert. It moves the earliest usable backstock batch (oldest received first), optionally only `qty` units, and never more than one batch per call.
 - **Fix drift:** the officer physically swaps the units, then presses "Mark swapped", which calls `admin_fefo_rebalance(item)`.
   - The room quantity stays the same and is re-assigned to the earliest-expiring usable lots: room → backstock first, then backstock → room.
   - Records never change without a physical action (ADR-006).

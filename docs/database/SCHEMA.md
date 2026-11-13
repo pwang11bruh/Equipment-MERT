@@ -9,6 +9,7 @@ Source of truth: `supabase/migrations/*.sql`. This file explains it. Update it w
 | `20261113000200_inventory_logic.sql` | Views, lot primitives, `process_submission`, admin RPCs, alerts engine, PIN functions |
 | `20261113000300_security.sql` | Grants, RLS enablement, policies |
 | `20261113000400_catalog_and_optional_expiry.sql` | Real catalog (115 items, 10 categories). `admin_receive_stock` no longer requires an expiry date. |
+| `20261113000500_move_next_batch.sql` | `admin_move_next_batch(item, qty?)` |
 
 ## Entity overview
 ```
@@ -108,5 +109,6 @@ One row per email or SMS attempt. Columns: `channel`, `destination`, `subject`, 
 | `admin_dispose_lot(lot, qty, reason)` | admin | Throw away |
 | `admin_adjust_lot(lot, new_qty, reason)` | admin | Physical count correction |
 | `admin_fefo_rebalance(item)` → moves | admin | After a physical swap, align the records with FEFO |
+| `admin_move_next_batch(item, qty?)` → units moved | admin | Move the earliest usable backstock batch (all lots sharing that expiry) into the room. `qty` null means the whole batch. Returns 0 if backstock is empty. |
 
 Internal helpers have no grants: `_assert_admin`, `_assert_room_fefo`, `_add_to_lot`, `_lot_move`, `_refresh_alerts` and `set_updated_at`.

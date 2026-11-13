@@ -42,13 +42,15 @@ Status markers in the tree: ✅ exists, 🔜 planned.
 │   │   │   ├── actions.ts         ✅ signInAction (username→@mert.local), signOutAction
 │   │   │   ├── login/             ✅ page.tsx + login-form.tsx
 │   │   │   └── (protected)/       ✅ layout checks isAdminRequest()
-│   │   │       ├── page.tsx           ✅ placeholder dashboard (alerts, recent submissions)
-│   │   │       ├── inventory/         stock table + lot drill-down/actions
-│   │   │       ├── items/             catalog CRUD
-│   │   │       ├── submissions/       submission log
-│   │   │       ├── alerts/            alert inbox
+│   │   │       ├── layout.tsx + nav-links.tsx  ✅ nav with open-alert badge
+│   │   │       ├── page.tsx           ✅ dashboard (KPIs, setup checklist, alerts, submissions)
+│   │   │       ├── inventory/         ✅ page + inventory-table (A–Z, filters, bulk pars), actions.ts,
+│   │   │       │                         item-form.tsx, new/, [id]/ (batches, receive, move next batch,
+│   │   │       │                         lot-actions, FEFO swap, item settings, history)
+│   │   │       ├── submissions/       ✅ log (flagged filter, pagination)
+│   │   │       ├── alerts/            ✅ inbox (tabs, bulk ack/resolve, re-check)
 │   │   │       ├── reports/           🔜 analytics + CSV export
-│   │   │       └── settings/          ✅ member PIN (thresholds, recipients 🔜)
+│   │   │       └── settings/          ✅ PIN, alert recipients, alert settings
 │   │   └── api/
 │   │       ├── cron/daily/route.ts    🔜 refresh_alerts + dispatch
 │   │       └── export/[kind]/route.ts 🔜 CSV export (admin only)
@@ -68,6 +70,7 @@ Status markers in the tree: ✅ exists, 🔜 planned.
 │   │   │   ├── service.ts         ✅ service-role client (server-only, bypasses RLS)
 │   │   │   └── middleware.ts      ✅ updateSession()
 │   │   ├── notifications/         🔜 email.ts, sms.ts, dispatch.ts
+│   │   ├── admin/                 ✅ result.ts (ActionResult, dbError), format.ts (dates, A–Z sort)
 │   │   └── validation/            ✅ submission.ts (submissionSchema, pinSchema)
 │   └── types/
 │       ├── domain.ts              ✅ hand-written domain types (mirror SQL)
