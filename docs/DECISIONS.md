@@ -69,3 +69,11 @@ Consequences:
 Supabase Auth requires an email address, so the shared admin account is `mertadmin@mert.local`. That domain is not real, and the account was created with auto-confirm.
 - The `/admin/login` form asks for a **Username**. If the input has no `@`, the app appends `@mert.local` before calling `signInWithPassword`.
 - **Consequence:** password-reset emails cannot be delivered. To change the password, use Supabase Dashboard → Authentication → Users → the user → update password. Do not build a "Forgot password" link.
+
+## ADR-010: Member form uses one A–Z list with search, not category groups
+**Date:** 2026-11-13 · **Status:** Accepted (owner decision)
+The member form shows every non-archived item in a single alphabetical list, with a search box at the top.
+- The search filters instantly, as you type, with a case-insensitive substring match on the item name. The `description` is shown as a hint under the name but is not searched.
+- Members tap items to add them and adjust quantities with steppers.
+- Categories still exist for the admin inventory views and the analytics breakdowns.
+- With 115 items, all filtering happens client-side. The list is fetched once per page load (names, units and descriptions only; never quantities).

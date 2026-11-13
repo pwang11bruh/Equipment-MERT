@@ -16,7 +16,7 @@ Tick each box when it is done, in the same change as the code, and keep [STATUS.
 
 ## Phase 2: Member submission portal (mobile)
 - [ ] `/submit` PIN gate page and server action
-- [ ] Submission form (React Hook Form + zod) with category-grouped item picker and qty steppers
+- [ ] Submission form (React Hook Form + zod): a **single A–Z list of all items with a search box** (no category grouping; ADR-010) and quantity steppers
 - [ ] Server action that calls `process_submission`
 - [ ] Confirmation screen with shortfall messaging
 - [ ] "Lock" button / session expiry handling

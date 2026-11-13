@@ -110,6 +110,7 @@ Vercel Cron → GET /api/cron/daily (Authorization: Bearer CRON_SECRET)
 - **Server-first.** Use Server Components and Server Actions. Use `"use client"` only for interactive widgets.
 - **No inventory math in TypeScript.** Quantity changes always go through SQL RPCs (see BUSINESS_LOGIC.md).
 - **Validate twice.** Use zod in the action for UX, and let SQL checks and constraints enforce the real rules.
+- **Member item picker = flat A–Z list + search** (ADR-010). There are no category headers on the member form; categories are used only in the admin and analytics views.
 - **Alphabetical ordering (owner request).** Every list of categories or items, on the member form, admin tables, exports and alert digests, is sorted A–Z, case-insensitive: category name first, then item name. Sort by name rather than `item_categories.sort_order`, so new categories added later stay in order automatically.
 - **Mobile first.** Use the member form at 360px width as the baseline, with tap targets ≥ 44px.
 - **Imports** use the `@/` alias, which maps to `src/`.

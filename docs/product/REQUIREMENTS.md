@@ -26,6 +26,7 @@ Team) equipment bag management system.
 | Do individual bags matter? | No. From an inventory perspective, bags don't matter. | Bags are not tracked (ADR-003, later superseded by ADR-008 below). |
 | Storage & FEFO (owner update, 2026-11-13) | Two locations: **Equipment Room** (active pool; only the earliest-expiring batch lives here) and **Backstock** (reserve, locked from the member form). A member restock deducts from the Equipment Room. When the room drops below par, the Equipment Officer is told: *"Equipment Room gauze is low. Move next batch (Exp: [Date]) from Backstock."* | ADR-008 supersedes ADR-003. |
 | Submissions apply immediately? | Yes | ADR-006 |
+| How should members find items? (2026-11-13) | One A–Z list of all items with a search box | ADR-010 |
 | Alert channels? | **Email + SMS + in-app.** | Resend for email, Twilio for SMS, and an alerts table for in-app (ADR-005). |
 | Budget detail? | **Unit cost only** (no budget targets). | `unit_cost` on items and lots. Spend analytics come from the movement ledger. Budgets are out of scope. |
 

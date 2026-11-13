@@ -61,7 +61,7 @@
    - reason (restock / replacement)
    - context (call / bag check / other)
    - optional call #
-   - a multi-line item picker grouped by category, with quantity steppers
+   - an item picker: **one flat A–Z list of every active item, with a search box** (instant, case-insensitive substring match) and quantity steppers on the selected items (ADR-010)
    - a cause per line when the reason is replacement
 3. A server action that validates the input with zod, checks `hasMemberSession()`, and calls `process_submission` via the service client.
 4. A success screen. Members never see stock counts. If the result is `flagged` (a discrepancy), say thanks and that the Equipment Officer has been notified.
