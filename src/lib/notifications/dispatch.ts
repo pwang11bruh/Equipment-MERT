@@ -2,7 +2,7 @@ import "server-only";
 
 import { publicEnv } from "@/lib/env";
 import { createServiceClient } from "@/lib/supabase/service";
-import type { AlertAudience, AlertSeverity } from "@/types/domain";
+import type { AlertAudience, AlertSeverity, AlertType } from "@/types/domain";
 
 import { sendEmail, sendSms, type SendResult } from "./providers";
 
@@ -16,8 +16,12 @@ import { sendEmail, sendSms, type SendResult } from "./providers";
  * Routing: audience 'all' -> every active recipient; 'equipment_officer' ->
  * recipients with role equipment_officer.
  *
- * mode "urgent": only alerts at/above sms_min_severity, sent right away
- *                (after a member submission).
+ * mode "urgent": sent right away (after a member submission or a stock
+ *                change by the admin). Includes alerts at/above
+ *                sms_min_severity AND every IMMEDIATE_EMAIL_TYPES alert —
+ *                e.g. the Equipment Room dropping below par is emailed
+ *                immediately (owner request 2026-11-13); SMS still only goes
+ *                out for alerts at/above sms_min_severity.
  * mode "digest": everything pending (daily cron).
  *
  * An alert is marked notified only if at least one message about it was
@@ -26,8 +30,12 @@ import { sendEmail, sendSms, type SendResult } from "./providers";
 
 const RANK: Record<AlertSeverity, number> = { info: 0, warning: 1, critical: 2 };
 
+/** Alert types that are emailed immediately instead of waiting for the daily digest. */
+const IMMEDIATE_EMAIL_TYPES: AlertType[] = ["low_stock_room"];
+
 interface PendingAlert {
   id: string;
+  alert_type: AlertType;
   severity: AlertSeverity;
   audience: AlertAudience;
   title: string;
@@ -48,7 +56,7 @@ export async function dispatchAlerts(mode: "urgent" | "digest"): Promise<Dispatc
 
   const [{ data: settings }, { data: alerts }, { data: recipients }] = await Promise.all([
     supabase.from("app_settings").select("email_enabled, sms_enabled, sms_min_severity, org_name").eq("id", 1).single(),
-    supabase.from("alerts").select("id, severity, audience, title, message, last_notified_severity").eq("status", "open"),
+    supabase.from("alerts").select("id, alert_type, severity, audience, title, message, last_notified_severity").eq("status", "open"),
     supabase.from("alert_recipients").select("id, name, role, email, phone_e164, notify_email, notify_sms").eq("is_active", true),
   ]);
   if (!settings || !alerts || !recipients) return summary;
@@ -57,7 +65,7 @@ export async function dispatchAlerts(mode: "urgent" | "digest"): Promise<Dispatc
   const pending = (alerts as PendingAlert[])
     .filter((a) => RANK[a.severity] >= RANK.warning)
     .filter((a) => a.last_notified_severity === null || RANK[a.severity] > RANK[a.last_notified_severity])
-    .filter((a) => mode === "digest" || RANK[a.severity] >= smsMin)
+    .filter((a) => mode === "digest" || RANK[a.severity] >= smsMin || IMMEDIATE_EMAIL_TYPES.includes(a.alert_type))
     .sort((a, b) => RANK[b.severity] - RANK[a.severity] || a.title.localeCompare(b.title));
   summary.pendingAlerts = pending.length;
   if (pending.length === 0) return summary;

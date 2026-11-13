@@ -3,6 +3,7 @@
 Newest first. Format: `YYYY-MM-DD: summary (area)`.
 
 ## 2026-11-13
+- Equipment Room below-par alerts are now emailed immediately, after member submissions and admin batch actions, instead of waiting for the daily digest (app).
 - Phase 4: Resend/Twilio providers, urgent and digest alert dispatch, `/api/cron/daily`, `vercel.json` cron, and Settings provider status plus "send test" (app).
 - Phase 5: `/admin/reports` (charts, per-item table) and CSV exports (app).
 - Fix: the app font fell back to serif because the Geist CSS variables were scoped to `<body>`; they are now on `<html>` (app).

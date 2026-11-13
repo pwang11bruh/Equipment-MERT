@@ -93,7 +93,9 @@ Channels by severity:
 
 After sending, set `last_notified_severity` and `last_notified_at`, and write one row per attempt to `notification_log`. The toggles `app_settings.email_enabled` and `sms_enabled` are respected.
 - **Two modes:**
-  - **urgent:** runs right after each member submission, via `after()`. It sends only alerts at or above `sms_min_severity`.
+  - **urgent:** runs right after each member submission and each admin batch action (dispose, adjust, move, status), via `after()`. Threshold edits do not trigger it.
+    - It emails alerts at or above `sms_min_severity`, **plus every `low_stock_room` alert ("Equipment Room X is low"), whatever its severity** (owner request, 2026-11-13: email immediately when an item drops below par).
+    - SMS still goes only to alerts at or above `sms_min_severity`.
   - **digest:** the daily cron. It sends everything pending at warning or above.
 - **Nothing is lost while providers are missing.** An alert is marked notified only if at least one message about it was actually **sent**. While Resend or Twilio isn't configured, sends are logged as `skipped` and the alert stays pending.
 - The SMS body is capped at about 600 characters and ends with a link to `/admin/alerts`.

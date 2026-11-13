@@ -1,9 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 import { z } from "zod";
 
 import { dbError, type ActionResult } from "@/lib/admin/result";
+import { dispatchAlerts } from "@/lib/notifications/dispatch";
 import { createClient } from "@/lib/supabase/server";
 import { EQUIPMENT_STATUSES, INVENTORY_LOCATIONS } from "@/types/domain";
 
@@ -13,6 +15,22 @@ import { EQUIPMENT_STATUSES, INVENTORY_LOCATIONS } from "@/types/domain";
 function refresh(itemId?: string) {
   revalidatePath("/admin", "layout");
   if (itemId) revalidatePath(`/admin/inventory/${itemId}`);
+}
+
+/**
+ * After a stock change that can lower the Equipment Room (dispose, adjust,
+ * move to backstock, out of service), send immediate notifications.
+ * Threshold edits deliberately do NOT trigger this (bulk par setup would
+ * email everyone at once); those alerts go out in the daily digest.
+ */
+function notifySoon() {
+  after(async () => {
+    try {
+      await dispatchAlerts("urgent");
+    } catch (e) {
+      console.error("urgent dispatch failed", e);
+    }
+  });
 }
 
 const qty = z.coerce.number().int().min(1, "Quantity must be at least 1").max(100000);
@@ -118,6 +136,7 @@ export async function lotAction(itemId: string, input: LotActionInput): Promise<
   }
   if (error) return dbError(error, "Couldn't update the lot.");
   refresh(itemId);
+  notifySoon();
   return { ok: true, message: "Saved." };
 }
 
