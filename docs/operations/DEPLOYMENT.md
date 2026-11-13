@@ -10,7 +10,8 @@ Status as of 2026-11-13:
   - ✅ Public sign-ups are disabled.
   - ✅ Migration 0400 (catalog, 115 items) pushed.
   - ⏳ Member PIN, thresholds and initial stock counts are still to do.
-- **Vercel:** not deployed. There is no GitHub remote yet.
+- **GitHub / Vercel:** not yet. See §2–3.
+- **Resend:** test mode chosen (no domain yet). **Twilio:** deferred (email-only).
 
 Update this file as each step is done.
 
@@ -39,13 +40,29 @@ Update this file as each step is done.
    ```
 6. Enter the catalog: either through the admin UI, or adapt the item section of `supabase/seed.sql`.
 
-## 2. Vercel
-1. Import the Git repo into Vercel (framework: Next.js).
-2. Add every variable from operations/ENVIRONMENT.md under Production (and Preview if wanted).
-3. Cron: `vercel.json` (Phase 4) will schedule `/api/cron/daily`. Hobby plans allow one run per day.
-4. Set `NEXT_PUBLIC_APP_URL` to the production URL and redeploy.
+## 2. GitHub (code hosting)
+The GitHub CLI isn't installed, so VS Code's built-in publishing is used:
+1. VS Code → **Source Control** panel (branch icon) → **Publish Branch** (or ⋯ → *Publish to GitHub*).
+2. Sign in to GitHub in the browser pop-up, choose **Publish to GitHub private repository**, and name it `mert-equipment`.
+3. Afterwards, `git push` works normally. The local `main` branch tracks `origin/main`.
 
-## 3. Post-deploy checklist
+## 3. Vercel (web hosting)
+1. Sign up at vercel.com **with GitHub**, then *Add New → Project* → import `mert-equipment`. The framework is auto-detected as Next.js.
+2. Before deploying, open **Environment Variables** and paste the contents of the gitignored file **`.env.vercel`** (generated from `.env.local` without the CLI-only secrets). Vercel accepts a pasted .env block.
+3. Deploy. Copy the production URL (e.g. `https://mert-equipment.vercel.app`), add `NEXT_PUBLIC_APP_URL=<that URL>` in Vercel env vars, and redeploy. Also update `NEXT_PUBLIC_APP_URL` in `.env.local` for local runs if you want links to point at production.
+4. Cron: `vercel.json` schedules `/api/cron/daily` at 12:00 UTC. Vercel sends `Authorization: Bearer $CRON_SECRET` automatically once `CRON_SECRET` is set.
+5. Optional: Supabase → Authentication → URL Configuration → Site URL = the Vercel URL. Password login doesn't need it, but it's tidy.
+
+## 4. Resend (email). Test mode until MERT has a domain
+1. Sign up at resend.com, create an **API key** (sending access), and add `RESEND_API_KEY` to `.env.local` and Vercel.
+2. With no verified domain, set `ALERT_EMAIL_FROM="MERT Equipment <onboarding@resend.dev>"`. **Test mode can only deliver to the email address the Resend account was created with.** Sends to anyone else fail (they are logged as `failed` in `notification_log`).
+3. Make sure that address is a recipient in Settings → Who gets alerts, and press **send test**.
+4. **To email the whole board:** buy or verify a domain (~$10–15/yr), add it in Resend → Domains, add the DNS records it shows, then change `ALERT_EMAIL_FROM` to e.g. `alerts@yourdomain.org`.
+
+## 5. Twilio (texts). Deferred by owner choice
+Texts are coded (room-at-par alerts plus anything ≥ `sms_min_severity`) but stay `skipped` until `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and `TWILIO_FROM_NUMBER` are set. US numbers need A2P 10DLC registration.
+
+## 6. Post-deploy checklist
 - [ ] The `/submit` PIN works, and a wrong PIN locks out after 8 tries.
 - [ ] Admin login works, and a non-registered auth user is refused.
 - [ ] A test submission moves stock and appears in the admin submissions page.

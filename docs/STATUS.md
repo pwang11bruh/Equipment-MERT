@@ -71,14 +71,11 @@
 - There is no git remote (GitHub) yet; Vercel deployment will need one.
 
 ## Next up
-1. **Deploy:**
-   - create a private GitHub repo and push
-   - import it into Vercel
-   - set the env vars (ENVIRONMENT.md), including `CRON_SECRET` and `NEXT_PUBLIC_APP_URL`
-   - set the Supabase Auth Site URL to the Vercel URL
-2. **Owner:** create Resend and Twilio accounts and add the keys. Test with Settings → "send test".
+1. **Owner:** publish to GitHub (VS Code → Source Control → Publish Branch, private). Then Vercel: import the repo, paste `.env.vercel`, deploy, and set `NEXT_PUBLIC_APP_URL`. See DEPLOYMENT.md §2–3.
+2. **Owner:** Resend in test mode (DEPLOYMENT.md §4). It only delivers to the Resend sign-up address until a domain is verified.
 3. **Owner:** enter real stock and pars; clear test submissions before go-live.
-4. **Hardening (Phase 6):** a committed SQL test script, Playwright e2e for `/submit`, a submission-reversal RPC, and a PWA manifest.
+4. **Later:** a domain for Resend (to email the whole board) and Twilio (texts).
+5. **Hardening (Phase 6):** a committed SQL test script, Playwright e2e, a submission-reversal RPC, and a PWA manifest.
 
 ## Known issues / caveats
 - **Shared admin account:** the audit trail cannot distinguish which admin acted; the ledger `actor` is always `'admin'`. This is accepted per the owner's decision (ADR-002).

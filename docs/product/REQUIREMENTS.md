@@ -28,7 +28,7 @@ Team) equipment bag management system.
 | Submissions apply immediately? | Yes | ADR-006 |
 | How should members find items? (2026-11-13) | One A–Z list of all items with a search box | ADR-010 |
 | When should the room par alert go out? (2026-11-13) | **As soon as the count reaches par**, by **email and text, immediately** | Migration 0600 (`<=`); `IMMEDIATE_TYPES` in `dispatch.ts` |
-| Which services? (2026-11-13) | GitHub, Vercel, Resend | Texting still needs an SMS provider (Resend is email-only); see STATUS |
+| Which services? (2026-11-13) | GitHub, Vercel, Resend. **No domain yet** and **email-only for now** (no Twilio) | Resend runs in test mode: from `onboarding@resend.dev`, and it can only deliver to the Resend account owner's address. Texts stay off until Twilio keys are added; the code is ready. |
 | Alert channels? | **Email + SMS + in-app.** | Resend for email, Twilio for SMS, and an alerts table for in-app (ADR-005). |
 | Budget detail? | **Unit cost only** (no budget targets). | `unit_cost` on items and lots. Spend analytics come from the movement ledger. Budgets are out of scope. |
 
