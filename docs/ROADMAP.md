@@ -52,7 +52,7 @@ Tick each box when it is done, in the same change as the code, and keep [STATUS.
 - [ ] Create the production Supabase project; `supabase db push`
 - [x] Bootstrap the shared admin user (`mertadmin`)
 - [ ] Set the production member PIN
-- [ ] Deploy to Vercel with env vars and cron
+- [x] Deploy to Vercel with env vars and cron (https://equipment-mert.vercel.app, 2026-11-23)
 - [ ] Automated tests for the SQL logic (pgTAP or a script) and e2e tests (Playwright) for the submit flow
 - [ ] Submission reversal RPC (undo a mistaken submission)
 

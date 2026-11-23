@@ -10,7 +10,7 @@ Status as of 2026-11-13:
   - ✅ Public sign-ups are disabled.
   - ✅ Migration 0400 (catalog, 115 items) pushed.
   - ⏳ Member PIN, thresholds and initial stock counts are still to do.
-- **GitHub / Vercel:** not yet. See §2–3.
+- **GitHub:** `pwang11bruh/Equipment-MERT` (private). **Vercel:** project `equipment-mert`, live at **https://equipment-mert.vercel.app**. It auto-deploys on every push to `main`. All 6 required env vars are set (verified 2026-11-23 via `/api/health`). ⏳ `NEXT_PUBLIC_APP_URL` still needs adding.
 - **Resend:** test mode chosen (no domain yet). **Twilio:** deferred (email-only).
 
 Update this file as each step is done.

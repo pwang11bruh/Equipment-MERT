@@ -1,7 +1,7 @@
 # Project Status
 
-**Last updated:** 2026-11-13
-**Current phase:** Phases 1–5 are built. Phase 4 email and SMS are waiting on owner accounts (Resend, Twilio). Next: deploy (GitHub, then Vercel).
+**Last updated:** 2026-11-23
+**Current phase:** Phases 1–5 are built and **deployed** at https://equipment-mert.vercel.app (Vercel, auto-deploys from GitHub `main`). Email is waiting on Resend (test mode); texts are deferred (Twilio).
 
 ## Current state
 
@@ -62,6 +62,11 @@
 - **Phase 5 (reports) is built:** `/admin/reports` (charts verified visually with sample data in headless Chrome), the per-item table, and CSV exports. `/api/export/*` returns 401 without admin.
 - **Fixed:** the app-wide serif font bug (Geist variables moved to `<html>`).
 
+- **Deployed (2026-11-23):** GitHub `pwang11bruh/Equipment-MERT`, Vercel project `equipment-mert`.
+  - Live smoke test passed: `/admin` redirects to login, the login page loads, the PIN screen loads, and the unlocked form shows 115 items.
+  - The cron returns 401 without the secret and runs with it. Exports return 401 without admin.
+  - `/api/health` reports that all required env vars are present.
+
 ### Pending
 - The member PIN is not set yet. Until it is, `verify_member_pin` always fails. The owner will set it from the admin Settings page (Phase 3), or we add a minimal settings page earlier.
 - **Catalog:** migration 0400 is **pushed to the hosted project** and verified: 115 items in 10 categories. All par and minimum thresholds are 0 (alerts off) until the owner sets them in the admin UI. No stock (lots) has been entered yet.
@@ -71,9 +76,9 @@
 - There is no git remote (GitHub) yet; Vercel deployment will need one.
 
 ## Next up
-1. **Owner:** publish to GitHub (VS Code → Source Control → Publish Branch, private). Then Vercel: import the repo, paste `.env.vercel`, deploy, and set `NEXT_PUBLIC_APP_URL`. See DEPLOYMENT.md §2–3.
-2. **Owner:** Resend in test mode (DEPLOYMENT.md §4). It only delivers to the Resend sign-up address until a domain is verified.
-3. **Owner:** enter real stock and pars; clear test submissions before go-live.
+1. **Owner:** add `NEXT_PUBLIC_APP_URL=https://equipment-mert.vercel.app` in Vercel env vars, then redeploy (it's used in alert email links).
+2. **Owner:** Resend in test mode (DEPLOYMENT.md §4). Add `RESEND_API_KEY` and `ALERT_EMAIL_FROM="MERT Equipment <onboarding@resend.dev>"` to Vercel, redeploy, then use Settings → send test.
+3. **Owner:** enter real stock and pars, set the production member PIN, and clear test submissions/alerts before go-live. Share `https://equipment-mert.vercel.app/submit` with members.
 4. **Later:** a domain for Resend (to email the whole board) and Twilio (texts).
 5. **Hardening (Phase 6):** a committed SQL test script, Playwright e2e, a submission-reversal RPC, and a PWA manifest.
 
