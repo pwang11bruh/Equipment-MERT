@@ -2,6 +2,9 @@
 
 Newest first. Format: `YYYY-MM-DD: summary (area)`.
 
+## 2026-11-23
+- Deployed to Vercel: https://equipment-mert.vercel.app (GitHub `pwang11bruh/Equipment-MERT`, auto-deploys from `main`). Added `/api/health` to report missing env vars (ops).
+
 ## 2026-11-13
 - The room alert now fires when the count reaches par (migration 0600, pushed) and is sent by email **and** text immediately (db/app).
 - Equipment Room below-par alerts are now emailed immediately, after member submissions and admin batch actions, instead of waiting for the daily digest (app).

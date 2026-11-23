@@ -62,6 +62,11 @@ The GitHub CLI isn't installed, so VS Code's built-in publishing is used:
 ## 5. Twilio (texts). Deferred by owner choice
 Texts are coded (room-at-par alerts plus anything ≥ `sms_min_severity`) but stay `skipped` until `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` and `TWILIO_FROM_NUMBER` are set. US numbers need A2P 10DLC registration.
 
+## Troubleshooting
+- **Check `/api/health` first.** It lists which required env vars the deployment can see (names only) and returns `ok: true` when all are present.
+- **`MIDDLEWARE_INVOCATION_FAILED` on `/admin`, or a 500 on `/api/cron/daily`, means the env vars are missing.** `NEXT_PUBLIC_*` values are baked in at **build** time, so after fixing env vars you must **Redeploy**.
+- **Pasting a .env file creates only one variable.** If the paste goes into the *Value* box, or the whole file becomes one variable (it happened once, as a variable named `envvercel`), delete it. Re-paste into the **Key** field, which splits the file into rows, or add each of the six keys separately.
+
 ## 6. Post-deploy checklist
 - [ ] The `/submit` PIN works, and a wrong PIN locks out after 8 tries.
 - [ ] Admin login works, and a non-registered auth user is refused.
